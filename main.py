@@ -213,26 +213,21 @@ def build_news_page(articles: list[dict]) -> None:
 def main() -> None:
     history = load_history()
     articles = load_articles()
-    articles = [article for article in articles if article["url"] not in history["seen_urls"]]
     articles.sort(key=lambda item: item["published"], reverse=True)
 
     relevant = [article for article in articles if article["is_keyword"]]
+    if len(relevant) < MAX_NEWS:
+        remaining = [item for item in articles if item not in relevant]
+        relevant.extend(remaining)
+
     selection = relevant[:MAX_NEWS]
 
     if not selection:
-        print("Nenhuma notícia relacionada com agribusiness foi encontrada. Tenta executar de novo mais tarde.")
+        print("Nenhuma notícia disponível no momento. Tenta executar de novo mais tarde.")
         return
-
-    if len(selection) < MAX_NEWS:
-        print(
-            f"Apenas {len(selection)} notícias relacionadas foram encontradas. "
-            "A página mostrará apenas estas notícias, para manter a seleção relevante."
-        )
 
     build_news_page(selection)
 
-    history["seen_urls"].extend(item["url"] for item in selection)
-    history["seen_urls"] = history["seen_urls"][-1000:]
     history["last_generated"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
     save_history(history)
 
