@@ -3,7 +3,7 @@ name: Atualização semanal de notícias agribusiness
 on:
   schedule:
     - cron: '0 9 * * MON'
-  workflow_dispatch: []
+  workflow_dispatch:
 
 jobs:
   update-news:
