@@ -138,16 +138,16 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
         whatsapp_text = urllib.parse.quote(f"{item['title']} {item['url']}")
         rows.append(
             f"""
-            <li>
-              <article>
+            <article class=\"card\">
+              <div>
                 <h2><a href=\"{item['url']}\" target=\"_blank\" rel=\"noopener noreferrer\">{item['title']}</a></h2>
                 <div class=\"meta\">{item['source']} · {item['published'].strftime('%d/%m/%Y %H:%M UTC')}</div>
-                <div class=\"article-share\">
-                  <a class=\"share-link\" href=\"mailto:?subject=Notícia agribusiness&body={email_body}\">Partilhar por email</a>
-                  <a class=\"share-link\" href=\"https://api.whatsapp.com/send?text={whatsapp_text}\" target=\"_blank\">Partilhar no WhatsApp</a>
-                </div>
-              </article>
-            </li>
+              </div>
+              <div class=\"article-share\">
+                <a class=\"share-link\" href=\"mailto:?subject=Notícia agribusiness&body={email_body}\">Partilhar por email</a>
+                <a class=\"share-link\" href=\"https://api.whatsapp.com/send?text={whatsapp_text}\" target=\"_blank\">Partilhar no WhatsApp</a>
+              </div>
+            </article>
             """
         )
 
@@ -164,39 +164,120 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Notícias Agribusiness - Seleção Semanal</title>
   <style>
-    body {{ font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; color: #1a1a1a; }}
-    .page {{ max-width: 960px; margin: 0 auto; padding: 24px; }}
-    header {{ margin-bottom: 24px; }}
-    h1 {{ font-size: 2.4rem; margin: 0 0 8px; }}
-    p.subtitle {{ margin: 0; color: #555; }}
-    .share-group {{ margin: 18px 0; }}
-    .button {{ display: inline-block; margin: 0 8px 8px 0; padding: 10px 18px; border: none; border-radius: 6px; background: #0b6cf3; color: white; text-decoration: none; font-weight: 600; }}
-    .button.secondary {{ background: #444; }}
-    ol {{ padding-left: 18px; }}
-    li {{ margin-bottom: 22px; background: white; padding: 18px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }}
-    h2 {{ font-size: 1.1rem; margin: 0 0 8px; }}
-    h2 a {{ color: #0b6cf3; text-decoration: none; }}
-    .meta {{ font-size: 0.93rem; color: #666; margin-bottom: 12px; }}
-    .article-share {{ margin-top: 10px; }}
-    .share-link {{ margin-right: 12px; color: #0b6cf3; text-decoration: none; font-size: 0.95rem; }}
+    :root {{
+      color-scheme: light;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+    }}
+
+    * {{ box-sizing: border-box; }}
+    body {{ margin: 0; padding: 0; background: linear-gradient(180deg, #f5f7fb 0%, #ffffff 100%); }}
+    a {{ color: inherit; text-decoration: none; }}
+    img {{ max-width: 100%; display: block; }}
+
+    .site-shell {{ max-width: 1180px; margin: 0 auto; padding: 24px 20px 40px; }}
+    .site-header {{ display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 0; }}
+    .brand {{ font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #0f3d68; }}
+    .nav-links {{ display: flex; gap: 16px; font-size: 0.95rem; color: #475569; }}
+    .nav-links a {{ color: #475569; transition: color 0.2s ease; }}
+    .nav-links a:hover {{ color: #0b6cf3; }}
+
+    .hero {{ background: linear-gradient(135deg, #0b6cf3 0%, #264c8f 100%); border-radius: 32px; color: white; padding: 56px 40px; position: relative; overflow: hidden; }}
+    .hero::before {{ content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 28%); pointer-events: none; }}
+    .hero::after {{ content: ""; position: absolute; inset: 0; background: radial-gradient(circle at bottom left, rgba(255,255,255,0.08), transparent 26%); pointer-events: none; }}
+    .hero-content {{ position: relative; z-index: 1; max-width: 760px; }}
+    .eyebrow {{ text-transform: uppercase; letter-spacing: 0.2em; font-size: 0.75rem; margin-bottom: 18px; color: rgba(255,255,255,0.85); }}
+    .hero h1 {{ font-size: clamp(2.4rem, 4vw, 4rem); line-height: 1.02; margin: 0 0 20px; }}
+    .hero p {{ font-size: 1.05rem; line-height: 1.8; max-width: 680px; color: rgba(255,255,255,0.92); margin: 0 0 28px; }}
+
+    .hero-actions {{ display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }}
+    .button {{ display: inline-flex; align-items: center; justify-content: center; min-height: 50px; padding: 0 22px; border-radius: 999px; border: none; cursor: pointer; font-weight: 700; transition: transform 0.2s ease, background 0.2s ease; }}
+    .button.primary {{ background: #ffffff; color: #0b6cf3; }}
+    .button.primary:hover {{ transform: translateY(-1px); background: #eff6ff; }}
+    .button.secondary {{ background: rgba(255,255,255,0.18); color: white; }}
+    .button.secondary:hover {{ transform: translateY(-1px); background: rgba(255,255,255,0.28); }}
+
+    .hero-meta {{ display: grid; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); gap: 14px; margin-top: 32px; }}
+    .hero-card {{ background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); border-radius: 18px; padding: 18px 20px; }}
+    .hero-card strong {{ display: block; font-size: 1.15rem; margin-bottom: 8px; }}
+    .hero-card span {{ color: rgba(255,255,255,0.8); font-size: 0.92rem; }}
+
+    .section-title {{ margin: 56px 0 20px; font-size: 1.75rem; line-height: 1.1; color: #0f172a; }}
+    .description {{ max-width: 760px; margin: 0 0 28px; color: #475569; font-size: 1rem; line-height: 1.8; }}
+
+    .news-grid {{ display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 20px; }}
+    .card {{ background: white; border-radius: 24px; padding: 24px; box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08); border: 1px solid rgba(15,23,42,0.06); display: flex; flex-direction: column; gap: 16px; }}
+    .card h2 {{ font-size: 1.1rem; margin: 0; line-height: 1.4; }}
+    .card h2 a {{ color: #0f3d68; }}
+    .card h2 a:hover {{ color: #0b6cf3; }}
+    .card .meta {{ font-size: 0.9rem; color: #64748b; margin: 0; }}
+    .card .article-share {{ display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; }}
+    .share-link {{ display: inline-flex; align-items: center; gap: 8px; color: #0b6cf3; text-decoration: none; font-size: 0.95rem; }}
+    .share-link:hover {{ text-decoration: underline; }}
+
+    .footer {{ margin-top: 48px; padding-top: 32px; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; color: #64748b; font-size: 0.95rem; }}
+    .footer a {{ color: #0b6cf3; }}
+    .footer .small {{ max-width: 720px; }}
+
+    @media (max-width: 640px) {{
+      .site-header {{ flex-direction: column; align-items: flex-start; gap: 12px; }}
+      .hero {{ padding: 36px 22px; }}
+      .hero-meta {{ grid-template-columns: 1fr; }}
+    }}
   </style>
 </head>
 <body>
-  <div class="page">
-    <header>
-      <h1>Seleção semanal de notícias agribusiness</h1>
-      <p class="subtitle">Última atualização: {generated_at.strftime('%d/%m/%Y %H:%M UTC')}</p>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="brand">Agribusiness News</div>
+      <nav class="nav-links">
+        <a href="#noticias">Notícias</a>
+        <a href="#partilhar">Partilhar</a>
+      </nav>
     </header>
 
-    <div class="share-group">
-      <a class="button" href="mailto:?subject=Seleção semanal de notícias agribusiness&body={share_text}">Partilhar por email</a>
-      <a class="button secondary" href="https://api.whatsapp.com/send?text={share_text}" target="_blank">Partilhar no WhatsApp</a>
-    </div>
+    <section class="hero">
+      <div class="hero-content">
+        <div class="eyebrow">Seleção semanal</div>
+        <h1>Notícias relevantes do agribusiness em Portugal, UE, Reino Unido e EUA</h1>
+        <p>Os 10 artigos mais recentes sobre agricultura, inovação agrícola, cadeia de valor e economia agroalimentar, selecionados de fontes credíveis.</p>
 
-    <p>Esta página apresenta uma seleção de notícias sobre agribusiness de Portugal, países da UE, Reino Unido e Estados Unidos, ordenadas pela data de publicação.</p>
-    <ol>
-      {''.join(rows)}
-    </ol>
+        <div class="hero-actions">
+          <a class="button primary" href="mailto:?subject=Seleção semanal de notícias agribusiness&body={share_text}">Partilhar por email</a>
+          <a class="button secondary" href="https://api.whatsapp.com/send?text={share_text}" target="_blank">Partilhar no WhatsApp</a>
+        </div>
+
+        <div class="hero-meta">
+          <div class="hero-card">
+            <strong>Última atualização</strong>
+            <span>{generated_at.strftime('%d/%m/%Y %H:%M UTC')}</span>
+          </div>
+          <div class="hero-card">
+            <strong>Total de notícias</strong>
+            <span>{len(news)}</span>
+          </div>
+          <div class="hero-card">
+            <strong>Fonte</strong>
+            <span>Portugal · UE · UK · EUA</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <h2 id="noticias" class="section-title">Últimas notícias</h2>
+      <p class="description">A seleção abaixo apresenta as notícias mais recentes e relevantes do setor agribusiness, ordenadas por data.</p>
+
+      <div class="news-grid">
+        {''.join(rows)}
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="small">Fonte: notícias públicas de jornais credíveis de Portugal, União Europeia, Reino Unido e Estados Unidos.</div>
+      <div>© {generated_at.year} Notícias Agribusiness</div>
+    </footer>
   </div>
 </body>
 </html>
