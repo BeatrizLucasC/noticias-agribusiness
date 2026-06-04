@@ -15,13 +15,18 @@ OUTPUT_FILE = ROOT / "index.html"
 MAX_NEWS = 10
 
 NEWS_SOURCES = [
+    ("Agroportal", "https://agroportal.pt/feed/"),
+    ("ECO", "https://eco.sapo.pt/rss/"),
     ("Público", "https://www.publico.pt/rss"),
     ("Jornal de Notícias", "https://www.jn.pt/rss/"),
     ("Expresso", "https://expresso.pt/rss"),
-    ("ECO", "https://eco.sapo.pt/rss/"),
-    ("Euractiv", "https://www.euractiv.com/section/agriculture-food/feed/"),
+    ("Euractiv Agriculture & Food", "https://www.euractiv.com/section/agriculture-food/feed/"),
     ("Politico Europe", "https://www.politico.eu/feed/"),
     ("Reuters Europe", "https://www.reuters.com/world/europe/rss.xml"),
+    ("Farmers Weekly", "https://www.fwi.co.uk/rss"),
+    ("AgWeb", "https://www.agweb.com/feed/"),
+    ("Farm Progress", "https://www.farmprogress.com/rss"),
+    ("Agriculture.com", "https://www.agriculture.com/rss"),
     ("Guardian UK", "https://www.theguardian.com/world/uk-news/rss"),
     ("Reuters UK", "https://www.reuters.com/world/uk/rss.xml"),
     ("BBC UK", "https://feeds.bbci.co.uk/news/uk/rss.xml"),
@@ -46,6 +51,11 @@ KEYWORDS = [
     "agrotech",
     "agronegócio",
     "agronegocio",
+    "agropecuária",
+    "agropecuaria",
+    "horticultura",
+    "agrifoodtech",
+    "foodtech",
     "commodities",
     "commoditie",
     "fertilizer",
@@ -54,6 +64,7 @@ KEYWORDS = [
     "irrigação",
     "supply chain",
     "bioeconomy",
+    "bioeconomia",
     "food security",
 ]
 
