@@ -165,24 +165,32 @@ Esta aplicação recolhe notícias do setor de agribusiness de fontes credíveis
 
 ### Como usar
 
-1. Instala as dependências:
+1. Ativa o ambiente virtual do projeto:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+2. Instala as dependências dentro do `.venv`:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-2. Executa o gerador de notícias:
+3. Executa o gerador de notícias:
 
 ```powershell
 python main.py
 ```
 
-3. Abre `index.html` no teu navegador para ver a seleção semanal.
+4. Abre `index.html` no teu navegador para ver a seleção semanal.
+
+> Se não estiveres a usar o terminal com `.venv` ativo, o Python pode apontar para outro ambiente e o Pylance pode não encontrar o pacote `feedparser`.
 
 ### GitHub e deploy
 
 - O ficheiro `index.html` fica no root do repositório.
-- Para publicar no GitHub Pages, faz um push para o teu repositório e depois ativa o Pages na branch `main` com a pasta `/root`.
+- Para publicar no GitHub Pages, faz um push para o teu repositório e depois ativa o Pages na branch `master` com a pasta `/root`.
 - Há também uma ação GitHub (`.github/workflows/weekly-news.yml`) que pode atualizar semanalmente a página.
 
 ### Atualização semanal automática
