@@ -144,8 +144,8 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
                 <div class=\"meta\">{item['source']} · {item['published'].strftime('%d/%m/%Y %H:%M UTC')}</div>
               </div>
               <div class=\"article-share\">
-                <a class=\"share-link\" href=\"mailto:?subject=Notícia agribusiness&body={email_body}\">Partilhar por email</a>
-                <a class=\"share-link\" href=\"https://api.whatsapp.com/send?text={whatsapp_text}\" target=\"_blank\">Partilhar no WhatsApp</a>
+                <a class="share-link" href="mailto:?subject=Notícia agribusiness&body={email_body}">✉️ Partilhar por email</a>
+                <a class="share-link" href="https://api.whatsapp.com/send?text={whatsapp_text}" target="_blank">💬 Partilhar no WhatsApp</a>
               </div>
             </article>
             """
@@ -241,11 +241,11 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
       <div class="hero-content">
         <div class="eyebrow">Seleção semanal</div>
         <h1>Notícias relevantes do agribusiness em Portugal, UE, Reino Unido e EUA</h1>
-        <p>Os 10 artigos mais recentes sobre agricultura, inovação agrícola, cadeia de valor e economia agroalimentar, selecionados de fontes credíveis.</p>
+        <p>Os 10 artigos mais recentes sobre agricultura, inovação agrícola, cadeia de valor e economia agroalimentar.</p>
 
         <div class="hero-actions">
-          <a class="button primary" href="mailto:?subject=Seleção semanal de notícias agribusiness&body={share_text}">Partilhar por email</a>
-          <a class="button secondary" href="https://api.whatsapp.com/send?text={share_text}" target="_blank">Partilhar no WhatsApp</a>
+          <a class="button primary" href="mailto:?subject=Seleção semanal de notícias agribusiness&body={share_text}">✉️ Partilhar por email</a>
+          <a class="button secondary" href="https://api.whatsapp.com/send?text={share_text}" target="_blank">💬 Partilhar no WhatsApp</a>
         </div>
 
         <div class="hero-meta">
@@ -258,7 +258,7 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
             <span>{len(news)}</span>
           </div>
           <div class="hero-card">
-            <strong>Fonte</strong>
+            <strong>Países considerados</strong>
             <span>Portugal · UE · UK · EUA</span>
           </div>
         </div>
@@ -267,7 +267,6 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
 
     <main>
       <h2 id="noticias" class="section-title">Últimas notícias</h2>
-      <p class="description">A seleção abaixo apresenta as notícias mais recentes e relevantes do setor agribusiness, ordenadas por data.</p>
 
       <div class="news-grid">
         {''.join(rows)}
@@ -275,7 +274,7 @@ def build_html(news: list[dict], generated_at: datetime.datetime) -> str:
     </main>
 
     <footer class="footer">
-      <div class="small">Fonte: notícias públicas de jornais credíveis de Portugal, União Europeia, Reino Unido e Estados Unidos.</div>
+      <div class="small">Países considerados: Portugal · UE · UK · EUA</div>
       <div>© {generated_at.year} Notícias Agribusiness</div>
     </footer>
   </div>
