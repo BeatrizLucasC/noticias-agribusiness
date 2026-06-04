@@ -39,10 +39,22 @@ KEYWORDS = [
     "agricole",
     "agrifood",
     "farm",
+    "farmers",
     "pecuária",
     "silvicultura",
     "agroindústria",
     "agrotech",
+    "agronegócio",
+    "agronegocio",
+    "commodities",
+    "commoditie",
+    "fertilizer",
+    "fertilizante",
+    "irrigation",
+    "irrigação",
+    "supply chain",
+    "bioeconomy",
+    "food security",
 ]
 
 
@@ -85,6 +97,15 @@ def load_articles() -> list[dict]:
             title = entry.get("title", "Sem título").strip()
             summary = entry.get("summary", "").strip()
             text = f"{title} {summary}" if summary else title
+
+            categories = []
+            for tag in getattr(entry, "tags", []) or []:
+                if isinstance(tag, dict):
+                    categories.append(tag.get("term", ""))
+                else:
+                    categories.append(getattr(tag, "term", ""))
+            categories_text = " ".join([cat for cat in categories if cat])
+
             articles.append(
                 {
                     "title": title,
@@ -92,7 +113,7 @@ def load_articles() -> list[dict]:
                     "source": source_name,
                     "published": published,
                     "text": text,
-                    "is_keyword": match_keywords(text),
+                    "is_keyword": match_keywords(text) or match_keywords(categories_text),
                 }
             )
 
@@ -185,14 +206,17 @@ def main() -> None:
     articles.sort(key=lambda item: item["published"], reverse=True)
 
     relevant = [article for article in articles if article["is_keyword"]]
-    if len(relevant) < MAX_NEWS:
-        remaining = [item for item in articles if item not in relevant]
-        relevant.extend(remaining)
-
     selection = relevant[:MAX_NEWS]
+
     if not selection:
-        print("Nenhuma notícia disponível no momento. Tenta executar de novo mais tarde.")
+        print("Nenhuma notícia relacionada com agribusiness foi encontrada. Tenta executar de novo mais tarde.")
         return
+
+    if len(selection) < MAX_NEWS:
+        print(
+            f"Apenas {len(selection)} notícias relacionadas foram encontradas. "
+            "A página mostrará apenas estas notícias, para manter a seleção relevante."
+        )
 
     build_news_page(selection)
 
